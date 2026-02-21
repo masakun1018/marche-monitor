@@ -1,0 +1,19 @@
+name: Run Script Every 3 Minutes
+
+on:
+  schedule:
+    - cron: "*/3 * * * *"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        run: python send.py
