@@ -15,7 +15,7 @@ TARGETS = {
     }
 }
 
-WEBHOOK_URL = "ここにあなたのWebhook URL"
+WEBHOOK_URL = "https://hooks.slack.com/services/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"
 # =================
 
 def get_count(url):
@@ -62,4 +62,5 @@ while True:
 
     except Exception as e:
         print("エラー:", e)
+
         time.sleep(10)
