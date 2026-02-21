@@ -1,6 +1,7 @@
 name: Run Script Every 3 Minutes
 
 on:
+　workflow_dispatch:
   schedule:
     - cron: "*/3 * * * *"
 
