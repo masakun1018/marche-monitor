@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import os
-import time
 
 # ===== 設定 =====
 TARGETS = {
@@ -27,39 +26,32 @@ def get_count(url):
     else:
         return soup.text.count("購入可能")
 
-while True:
-    try:
-        for name, data in TARGETS.items():
+# ===== 1回だけチェックして終了 =====
+for name, data in TARGETS.items():
 
-            url = data["url"]
-            notify_message = data["message"]
-            save_file = f"{name}_count.txt"
+    url = data["url"]
+    notify_message = data["message"]
+    save_file = f"{name}_count.txt"
 
-            count = get_count(url)
+    count = get_count(url)
 
-            if os.path.exists(save_file):
-                with open(save_file, "r") as f:
-                    old_count = int(f.read())
-            else:
-                old_count = None
+    if os.path.exists(save_file):
+        with open(save_file, "r") as f:
+            old_count = int(f.read())
+    else:
+        old_count = None
 
-            print(f"[{name}] 前回:", old_count)
-            print(f"[{name}] 今回:", count)
+    print(f"[{name}] 前回:", old_count)
+    print(f"[{name}] 今回:", count)
 
-            if old_count is not None and count != old_count:
+    if old_count is not None and count != old_count:
 
-                requests.post(
-                    WEBHOOK_URL,
-                    json={"text": f"{notify_message}\n前回:{old_count} → 今回:{count}\n{url}"}
-                )
+        requests.post(
+            WEBHOOK_URL,
+            json={"text": f"{notify_message}\n前回:{old_count} → 今回:{count}\n{url}"}
+        )
 
-                print("Slack通知しました！")
+        print("Slack通知しました！")
 
-            with open(save_file, "w") as f:
-                f.write(str(count))
-
-        time.sleep(180)  # ←180秒ごと（変更OK）
-
-    except Exception as e:
-        print("エラー:", e)
-        time.sleep(180)
+    with open(save_file, "w") as f:
+        f.write(str(count))
